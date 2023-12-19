@@ -3,7 +3,6 @@ from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 import random
 import datetime
 import get_model_path as get
-import numpy as np
 
 output_sample_path_main=''
 model_name_main=''
@@ -51,7 +50,7 @@ def inference(
   predictions = trainer.predict(model=model, datamodule=dataloader)
 
   # 결과 처리
-  predictions = [(float(i)) for i in torch.cat(predictions)]
+  predictions = [min(max(float(i), 0.0), 5.0) for i in torch.cat(predictions)]
   output_sample_path_main=output_sample_path
   model_name_main=model_name
 
@@ -61,8 +60,4 @@ def inference(
 if __name__ == "__main__":
   output = pd.read_csv(output_sample_path_main)
   output['label'] = inference()
-
-  output["label"] = np.where(output["label"] >= 5, 5.0, output["label"])
-  output["label"] = np.where(output["label"] <= 0, 0.0, output["label"])
-  
   output.to_csv(f'{model_name_main}output.csv', index=False)
