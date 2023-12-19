@@ -2,6 +2,7 @@ from model import *
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 import random
 import datetime
+import numpy as np
 import get_model_path as get
 
 output_sample_path_main=''
