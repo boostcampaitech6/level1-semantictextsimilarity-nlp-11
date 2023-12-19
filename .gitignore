@@ -5,3 +5,4 @@
 /model/*
 /data/*
 /lightning_logs/*
+/wandb/*
