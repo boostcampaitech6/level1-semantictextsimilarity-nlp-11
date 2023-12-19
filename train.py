@@ -4,6 +4,8 @@ import argparse
 import random
 import datetime
 import get_model_path as get
+import pytorch_lightning as pl
+import wandb
 
 # seed 고정
 torch.manual_seed(0)
@@ -45,13 +47,24 @@ early_stop_callback = EarlyStopping(monitor="val_loss", min_delta=0.00, patience
 trainer = Trainer(accelerator="auto", devices=1, max_epochs=args.max_epoch, log_every_n_steps=100, 
                   callbacks=[early_stop_callback, checkpoint_callback])
 
+# W&B 연동을 위한 설정
+wandb.init(project='Level-1', entity='nlp-11_4intcute', config=vars(trainer))
+wandb_logger = pl.loggers.WandbLogger()
+wandb.run.name = "run_name" # wandb에서
+wandb.run.save()
+trainer.logger = wandb_logger
+
 # Train part
 trainer.fit(model=model, datamodule=dataloader)
-trainer.test(model=model, datamodule=dataloader)
 
 # 학습이 완료된 모델을 저장합니다.
 best_model_path = checkpoint_callback.best_model_path
 best_model = Model.load_from_checkpoint(best_model_path)
+
+# 최적의 metric 값
+best_val_loss = early_stop_callback.best_score
+print(f'early stop val loss : {best_val_loss}')
+wandb.log({"best_val_loss": best_val_loss})
 
 # best pearson 확인
 result = trainer.test(model=best_model, datamodule=dataloader)
