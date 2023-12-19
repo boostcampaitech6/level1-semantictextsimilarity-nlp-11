@@ -1,0 +1,8 @@
+# misc
+.DS_Store
+
+#모델과 데이터 폴더 제외
+/model/*
+/data/*
+/lightning_logs/*
+/wandb/*
