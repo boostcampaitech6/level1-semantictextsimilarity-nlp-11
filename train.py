@@ -89,3 +89,6 @@ model_name = f"epoch={epoch_es}-val_pearson={best_pearson:.4f}_{ts}.pt"
 
 # model save
 torch.save(best_model, os.path.join(dirpath, model_name))
+
+import send2slack
+send2slack.send2slack(msg="어서 다음 학습을 하세요")
