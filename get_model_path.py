@@ -16,7 +16,7 @@ def get_best_checkpoint(checkpoint_dir):
   best_pearson = -float("inf")
 
   for checkpoint in checkpoints:
-    if not checkpoint.endswith("pt"):
+    if not checkpoint.endswith(".pt"):
       continue
 
     # {val_pearson:.2f}을 추출합니다.
