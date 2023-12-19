@@ -60,4 +60,8 @@ def inference(
 if __name__ == "__main__":
   output = pd.read_csv(output_sample_path_main)
   output['label'] = inference()
+
+  output["label"] = np.where(output["label"] >= 5, 5.0, output["label"])
+  output["label"] = np.where(output["label"] <= 0, 0.0, output["label"])
+  
   output.to_csv(f'{model_name_main}output.csv', index=False)
