@@ -3,7 +3,7 @@
 ./data/train2x.csv
 
 data폴더에 3trance2xnolabel.csv,train2x.csv 추가
-infetrance.py에 model_name 변경
+infetrans.py에 model_name 변경
 
 python inftrans.py 실행
 
