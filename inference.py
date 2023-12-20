@@ -4,11 +4,11 @@ import random
 import datetime
 import get_model_path as get
 
-output_sample_path_main=''
-model_name_main=''
+output_sample_path='./data/sample_submission.csv'
+model_name='klue/roberta-small'
 
 def inference(
-    model_name="klue/roberta-small",
+    model_name=model_name,
     train_path="./data/train.csv",
     dev_path="./data/dev.csv",
     test_path="./data/dev.csv",
@@ -17,7 +17,7 @@ def inference(
     shuffle=True,
     learning_rate=1e-5,
     max_epoch=1,
-    output_sample_path='./data/sample_submission.csv'
+    output_sample_path=output_sample_path
 ):
   """
   모델을 불러와서 예측을 수행하고 결과를 저장하는 함수입니다.
@@ -51,13 +51,10 @@ def inference(
 
   # 결과 처리
   predictions = [min(max(float(i), 0.0), 5.0) for i in torch.cat(predictions)]
-  output_sample_path_main=output_sample_path
-  model_name_main=model_name
-
   return predictions
 
 
 if __name__ == "__main__":
-  output = pd.read_csv(output_sample_path_main)
+  output = pd.read_csv(output_sample_path)
   output['label'] = inference()
-  output.to_csv(f'{model_name_main}output.csv', index=False)
+  output.to_csv(f'{model_name}output.csv', index=False)
