@@ -57,4 +57,4 @@ def inference(
 if __name__ == "__main__":
   output = pd.read_csv(output_sample_path)
   output['label'] = inference()
-  output.to_csv(f'{model_name}output.csv', index=False)
+  output.to_csv(f'{get.get_safe_filename(model_name)}output.csv', index=False)
