@@ -6,6 +6,9 @@ import pandas as pd
 csv_path = './data/'
 pts = os.listdir(csv_path)
 
+# 폴더 내의 파일을 이름순으로 정렬합니다.
+pts = list(sorted(pts))
+
 # DataFrame을 생성하고, id 칼럼과 각 파일들의 예측치 칼럼들을 추가합니다.
 df = pd.DataFrame()
 
