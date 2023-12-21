@@ -8,3 +8,4 @@
 /wandb/*
 /backup/*
 /weighted_ens/data
+/__pycache__/*
