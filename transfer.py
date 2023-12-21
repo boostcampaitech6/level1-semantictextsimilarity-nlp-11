@@ -2,22 +2,23 @@ from model import *
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 import random
 import datetime
+import numpy as np
 import get_model_path as get
 
-output_sample_path='./data/sample_submission.csv'
-model_name='klue/roberta-small'
+output_sample_path_main=''
+model_name_main=''
 
 def inference(
-    model_name=model_name,
+    model_name="klue/roberta-small",
     train_path="./data/train.csv",
     dev_path="./data/dev.csv",
     test_path="./data/dev.csv",
-    predict_path="./data/test.csv",
+    predict_path="./data/3trance2xnolabel.csv",
     batch_size=16,
     shuffle=True,
     learning_rate=1e-5,
     max_epoch=1,
-    output_sample_path=output_sample_path
+    output_sample_path='./data/3trance2xnolabel.csv'
 ):
   """
   모델을 불러와서 예측을 수행하고 결과를 저장하는 함수입니다.
@@ -50,11 +51,18 @@ def inference(
   predictions = trainer.predict(model=model, datamodule=dataloader)
 
   # 결과 처리
-  predictions = [min(max(float(i), 0.0), 5.0) for i in torch.cat(predictions)]
+  predictions = [(float(i)) for i in torch.cat(predictions)]
+  output_sample_path_main=output_sample_path
+  model_name_main=model_name
+
   return predictions
 
 
 if __name__ == "__main__":
-  output = pd.read_csv(output_sample_path)
+  output = pd.read_csv(output_sample_path_main)
   output['label'] = inference()
-  output.to_csv(f'{get.get_safe_filename(model_name)}output.csv', index=False)
+
+  output["label"] = np.where(output["label"] >= 5, 5.0, output["label"])
+  output["label"] = np.where(output["label"] <= 0, 0.0, output["label"])
+  
+  output.to_csv(f'./data/{model_name_main}_pseudolabel.csv', index=False)
