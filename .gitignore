@@ -6,4 +6,5 @@
 /data/*
 /lightning_logs/*
 /wandb/*
-/__pycache__/*
+/backup/*
+/weighted_ens/data
